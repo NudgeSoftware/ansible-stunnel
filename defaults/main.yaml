@@ -30,3 +30,9 @@ stunnel_config_file: /etc/stunnel/stunnel.conf
 
 # Stunnel configuration
 stunnel_config: {}
+
+# Cert contents
+#stunnel_cert_data: "{{lookup('file','path/to/pem/file')}}"
+
+# Location of cert file
+stunnel_cert_file: /etc/stunnel/cert

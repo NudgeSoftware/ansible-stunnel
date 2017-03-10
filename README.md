@@ -71,11 +71,6 @@ stunnel_config: {}
 ```
 
 
-Dependencies
-------------
-
-- [`config_encoder_filters`](https://github.com/jtyr/ansible-config_encoder_filters)
-
 
 License
 -------

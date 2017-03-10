@@ -1,0 +1,9 @@
+{% for section_name, section in stunnel_config.iteritems() %}
+{% if section_name != "default" %}
+[{{ section_name }}]
+{% endif %}
+{% for item_name, item_value in section.iteritems() -%}
+{{ item_name }} = {{ item_value }}
+{%- endfor %}
+
+{% endfor %}

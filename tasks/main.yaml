@@ -15,10 +15,21 @@
   tags:
     - stunnel_pkg
 
-- name: Configure Stunnel
-  template:
-    src: stunnel.conf.j2
+- name: write stunnel.conf 
+  template: 
+    src: etc/stunnel/stunnel.conf.j2
     dest: "{{ stunnel_config_file }}"
+  notify:
+    - Restart Stunnel service
+  tags:
+    - stunnel_config  
+
+- name: Write cert file
+  copy:
+    content: "{{ stunnel_cert_data }}"
+    dest: "{{ stunnel_cert_file }}"
+    mode: 0600
+  when: stunnel_cert_data is defined
   notify:
     - Restart Stunnel service
   tags:
