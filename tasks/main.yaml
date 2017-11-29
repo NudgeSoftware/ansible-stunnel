@@ -1,5 +1,4 @@
 ---
-
 - name: Test distribution
   assert:
     that: >
@@ -15,6 +14,19 @@
   tags:
     - stunnel_pkg
 
+- name: Write cert file
+  copy:
+    content: "{{ item.content }}"
+    dest: "{{ item.path }}"
+    mode: 0600
+  no_log: "{{ censor_secrets|d(true) }}"
+  when: stunnel_certs is defined
+  notify:
+    - Restart Stunnel service
+  tags:
+    - stunnel_config
+  with_items: "{{ stunnel_certs }}"
+
 - name: write stunnel.conf 
   template: 
     src: etc/stunnel/stunnel.conf.j2
@@ -24,24 +36,25 @@
   tags:
     - stunnel_config  
 
-- name: Write cert file
+- name: Install Stunnel systemd script
   copy:
-    content: "{{ stunnel_cert_data }}"
-    dest: "{{ stunnel_cert_file }}"
-    mode: 0600
-  when: stunnel_cert_data is defined
-  notify:
-    - Restart Stunnel service
+    src: stunnel.systemd
+    dest: "{{ stunnel_service_systemd }}"
+    mode: 0644
+  when:
+    - stunnel_service_install
+    - ansible_service_mgr == 'systemd'
   tags:
-    - stunnel_config
+    - stunnel_service
 
-- name: Install Stunnel service script
+- name: Install Stunnel upstart script
   copy:
-    src: "{{ stunnel_service_script[ansible_service_mgr]['src'] }}"
-    dest: "{{ stunnel_service_script[ansible_service_mgr]['dest'] }}"
-    mode: "{{ stunnel_service_script[ansible_service_mgr]['mode'] | default('0644') }}"
-  when: >
-    stunnel_service_install
+    src: stunnel.upstart
+    dest: "{{ stunnel_service_upstart }}"
+    mode: 0755
+  when:
+    - stunnel_service_install
+    - ansible_service_mgr == 'upstart'
   tags:
     - stunnel_service
 

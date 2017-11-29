@@ -1,9 +1,9 @@
-{% for section_name, section in stunnel_config.iteritems() %}
-{% if section_name != "default" %}
-[{{ section_name }}]
-{% endif %}
-{% for item_name, item_value in section.iteritems() -%}
-{{ item_name }} = {{ item_value }}
-{%- endfor %}
+{% for stanza in stunnel_config.keys() %}
+{%   if stanza != "default" %}
+[{{ stanza }}]
+{%   endif %}
+{%   for key in stunnel_config[stanza].keys() %}
+{{ key }} = {{ stunnel_config[stanza][key] }}
+{%   endfor %}
 
 {% endfor %}

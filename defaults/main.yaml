@@ -15,24 +15,12 @@ stunnel_service_upstart: /etc/init.d/{{ stunnel_service }}
 # Path of the systemd script
 stunnel_service_systemd: /usr/lib/systemd/system/{{ stunnel_service }}.service
 
-# Data structure which helps to choose the right service script
-stunnel_service_script:
-  systemd:
-    src: stunnel.systemd
-    dest: "{{ stunnel_service_systemd }}"
-  upstart:
-    src: stunnel.upstart
-    dest: "{{ stunnel_service_upstart }}"
-    mode: "0755"
-
 # Location of the Stunnel config file
 stunnel_config_file: /etc/stunnel/stunnel.conf
 
 # Stunnel configuration
 stunnel_config: {}
 
-# Cert contents
-#stunnel_cert_data: "{{lookup('file','path/to/pem/file')}}"
-
-# Location of cert file
-stunnel_cert_file: /etc/stunnel/cert
+stunnel_certs: []
+# - path: /etc/stunnel/cert
+#   content: "{{lookup('file','path/to/pem/file')}}"
