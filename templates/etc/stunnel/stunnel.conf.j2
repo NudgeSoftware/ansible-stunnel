@@ -1,7 +1,11 @@
-{% for stanza in stunnel_config.keys() %}
-{%   if stanza != "default" %}
+{% if "default" in stunnel_config %}
+{%   for key in stunnel_config.default.keys() %}
+{{ key }} = {{ stunnel_config.default[key] }}
+{%   endfor %}
+
+{% endif %}
+{% for stanza in stunnel_config.keys() if stanza != "default" %}
 [{{ stanza }}]
-{%   endif %}
 {%   for key in stunnel_config[stanza].keys() %}
 {{ key }} = {{ stunnel_config[stanza][key] }}
 {%   endfor %}
